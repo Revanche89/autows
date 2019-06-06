@@ -1,0 +1,26 @@
+- name: as3 deployment
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+
+    uri_method: POST
+
+  vars_files: 
+
+    - ../creds/bigip_creds.yml
+
+  tasks: 
+
+  - name: Create a Big IP Tenant
+    uri:
+      url: https://34.253.71.115/mgmt/shared/appsvcs/declare
+      user: "{{bigip_username}}"
+      password: "{{bigip_password}}"
+      method: "{{uri_method}}"
+      body: "{{ lookup('file','./as3-declare.json') }}"
+      force_basic_auth: yes
+      status_code: 200
+      body_format: json
+      validate_certs: no
